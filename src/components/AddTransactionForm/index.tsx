@@ -19,9 +19,9 @@ type FormValues = {
 type AddTransactionRequest = {
   type: 'add' | 'remove'
   transactionId: string | null
-  refId: string
+  refId: string | null
   ownerId: string
-  counterPartyId: string
+  counterPartyId: string | null
   description: string
   amount: number
 }
@@ -50,30 +50,41 @@ export const AddTransactionForm = () => {
       requests: [],
     }
 
-    const lenderName = players.find((player) => player._id === lenderId)?.name
-    const borrowerName = players.find((player) => player._id === borrowerId)?.name
-    const refId = `${lenderName}-${borrowerName}-${Date.now()}`
-
-    req.requests.push(
-      {
+    if (borrowerId === 'buyOut') {
+      req.requests.push({
         type: 'add',
         transactionId: null,
         ownerId: lenderId,
-        counterPartyId: borrowerId!,
-        description: `${capitalizeString(lenderName!)} lent to ${capitalizeString(borrowerName!)}`,
+        counterPartyId: null,
+        description: 'Buy-out',
         amount: amount,
-        refId,
-      },
-      {
-        type: 'add',
-        transactionId: null,
-        ownerId: borrowerId,
-        counterPartyId: lenderId!,
-        description: `${capitalizeString(borrowerName!)} borrowed from ${capitalizeString(lenderName!)}`,
-        amount: -amount,
-        refId,
-      }
-    )
+        refId: null,
+      })
+    } else {
+      const lenderName = players.find((player) => player._id === lenderId)?.name
+      const borrowerName = players.find((player) => player._id === borrowerId)?.name
+      const refId = `${lenderName}-${borrowerName}-${Date.now()}`
+      req.requests.push(
+        {
+          type: 'add',
+          transactionId: null,
+          ownerId: lenderId,
+          counterPartyId: borrowerId!,
+          description: `${capitalizeString(lenderName!)} lent to ${capitalizeString(borrowerName!)}`,
+          amount: amount,
+          refId,
+        },
+        {
+          type: 'add',
+          transactionId: null,
+          ownerId: borrowerId,
+          counterPartyId: lenderId!,
+          description: `${capitalizeString(borrowerName!)} borrowed from ${capitalizeString(lenderName!)}`,
+          amount: -amount,
+          refId,
+        }
+      )
+    }
 
     const res = await axios.post('https://poker-board.herokuapp.com/api/v1/transactions', { ...req })
     dispatch(loadGame(res.data as Game))
@@ -111,7 +122,7 @@ export const AddTransactionForm = () => {
                 {players.map((player) => (
                   <option value={player._id}>{capitalizeString(player.name)}</option>
                 ))}
-                <option value="Buy-out">Buy out</option>
+                <option value="buyOut">Buy out</option>
               </Field>
             </div>
             <div className="w-1/3 pl-1">
