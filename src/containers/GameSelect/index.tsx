@@ -96,7 +96,7 @@ export const GameSelect = () => {
                     onClick={() => setDeleteGame({ _id, name })}
                   >
                     <span
-                      className={`px-2 py-1 border border-gray-400 rounded-lg ${
+                      className={`px-2 py-1 border-2 border-gray-400 rounded-lg ${
                         game?._id === _id ? ' border-gray-600 font-bold text-sm' : 'text-gray-400 text-sm'
                       }`}
                     >
