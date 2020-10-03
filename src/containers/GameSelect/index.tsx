@@ -19,7 +19,6 @@ export const GameSelect = () => {
   const allGames = useSelector((state: AppState) => state.pokerBoard.allGames)
   const game = useSelector((state: AppState) => state.pokerBoard.game)
   const showGameList = useSelector((state: AppState) => state.pokerBoard.showGameList)
-
   const [fetchingGame, setFetchingGame] = useState<GameFetching | undefined>()
   const [deleteGame, setDeleteGame] = useState<GameName | undefined>()
 
@@ -48,11 +47,14 @@ export const GameSelect = () => {
     await axios.delete(`https://poker-board.herokuapp.com/api/v1/game/${deleteGame?._id}`)
     const res = await axios.get('https://poker-board.herokuapp.com/api/v1')
     setDeleteGame(undefined)
-    dispatch(loadAll(res.data as GameName[]))
+    batch(() => {
+      if (deleteGame?._id === game?._id) dispatch(loadGame(undefined))
+      dispatch(loadAll(res.data as GameName[]))
+    })
   }
 
   return (
-    <div className="mt-2 px-4">
+    <div className="mt-2 px-4 w-full">
       {/* select game panel */}
       <div
         tabIndex={0}
@@ -68,11 +70,12 @@ export const GameSelect = () => {
       </div>
       {/* Game panel */}
       <Transition showCondition={showGameList}>
-        <div className="flex-col mt-2 px-8 bg-gray-300 rounded-lg shadow-lg transition ease-in-out duration-100 ">
+        <div className="flex-col mt-2 px-8 py-1 bg-gray-300 rounded-lg shadow-lg transition ease-in-out duration-100 ">
           {allGames ? (
             <>
               {allGames.map(({ _id, name }, index) => (
                 <div
+                  key={index}
                   className={`my-1 pl-1 pr-2 py-1 flex justify-between items-center ${
                     index !== 0 && 'border-t border-opacity-25 border-gray-600'
                   }`}

@@ -51,7 +51,7 @@ export type LoadAllGamesAction = {
 export type LoadGameAction = {
   type: typeof LOAD_GAME
   payload: {
-    game: Game
+    game: Game | undefined
   }
 }
 

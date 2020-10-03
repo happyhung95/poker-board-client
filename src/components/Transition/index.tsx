@@ -2,14 +2,22 @@ import React from 'react'
 import { Transition as TailwindTransaction } from '@tailwindui/react'
 
 type Props = {
+  id?: string
   children: React.ReactNode
   showCondition: boolean
   durationEnter?: '75' | '100' | '150' | '200' | '300' | '500' | '700' | '1000'
   durationLeave?: '75' | '100' | '150' | '200' | '300' | '500' | '700' | '1000'
 }
 
-export const Transition = ({ children, showCondition, durationEnter = '200', durationLeave = '100' }: Props) => (
+export const Transition = ({
+  id = '',
+  children,
+  showCondition,
+  durationEnter = '200',
+  durationLeave = '100',
+}: Props) => (
   <TailwindTransaction
+    id={id}
     show={showCondition}
     enter={`transition ease-out duration-${durationEnter} transform`}
     enterFrom="opacity-0 scale-95"
@@ -21,4 +29,3 @@ export const Transition = ({ children, showCondition, durationEnter = '200', dur
     {children}
   </TailwindTransaction>
 )
-

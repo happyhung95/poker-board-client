@@ -5,12 +5,12 @@ import { DownArrowSVG } from '../../svgs'
 import { capitalizeString } from '../../helpers'
 import { Player } from '../../types'
 
-type PlayerCardProps = {
+type Props = {
   player: Player
   players: Player[]
 }
 
-export const PlayerCard = ({ player, players }: PlayerCardProps) => {
+export const PlayerCard = ({ player, players }: Props) => {
   const { name, balance, transactions } = player
   const [showTransactions, toggleShowTransactions] = useState(false)
 

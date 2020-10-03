@@ -6,7 +6,14 @@ import Loader from 'react-loader-spinner'
 import axios from 'axios'
 
 import { Transition } from '../../components'
-import { loadAll, loadGame, displayCreateGame, displayGameSelect, displayGameCard } from '../../redux/actions'
+import {
+  loadAll,
+  loadGame,
+  displayCreateGame,
+  displayGameSelect,
+  displayGameCard,
+  displayGameList,
+} from '../../redux/actions'
 import { capitalizeString } from '../../helpers'
 import { Game, GameName, AppState } from '../../types'
 
@@ -20,10 +27,12 @@ export const CreateGame = () => {
   const [loading, setLoading] = useState(false)
   const showCreateGame = useSelector((state: AppState) => state.pokerBoard.showCreateGame)
 
+  const suggestedName = `Poker ${new Date().getDate()}.${new Date().getMonth() + 1}`
+
   const handleSubmit = async ({ name, buyIn }: FormValues) => {
     setLoading(true)
     const res = await axios.post(`https://poker-board.herokuapp.com/api/v1/game`, {
-      name: name ? capitalizeString(name) : `Poker ${new Date().getDate()}.${new Date().getMonth()}`,
+      name: name ? capitalizeString(name) : suggestedName,
       buyIn: buyIn ? parseInt(buyIn) : 40,
     })
     const allGames = await axios.get('https://poker-board.herokuapp.com/api/v1')
@@ -33,6 +42,7 @@ export const CreateGame = () => {
         dispatch(loadGame(res.data as Game))
         dispatch(loadAll(allGames?.data as GameName[]))
         dispatch(displayGameSelect(true))
+        dispatch(displayGameList(false))
         if (res.data) dispatch(displayGameCard(true))
       })
     }, 150)
@@ -51,7 +61,7 @@ export const CreateGame = () => {
                   <Field
                     className="w-40 py-1 px-2 font-mono font-medium text-gray-800 border border-gray-200 border-opacity-25 rounded bg-gray-200 outline-none"
                     name="name"
-                    placeholder="Poker 12.11"
+                    placeholder={suggestedName}
                   />
                 </div>
                 <div className="flex px-4 items-center">

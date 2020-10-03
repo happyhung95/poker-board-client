@@ -17,7 +17,7 @@ export function loadAll(allGames: GameName[]): Actions {
   }
 }
 
-export function loadGame(game: Game): Actions {
+export function loadGame(game: Game | undefined): Actions {
   return {
     type: LOAD_GAME,
     payload: { game },

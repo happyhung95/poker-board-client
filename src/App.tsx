@@ -23,18 +23,20 @@ export default function App() {
   }, [dispatch])
 
   return (
-    <>
-      <NavBar />
-      <Transition showCondition={showCreateGame}>
-        <CreateGame />
-      </Transition>
-      <Transition showCondition={showGameSelect}>
-        <GameSelect />
-      </Transition>
-      <Transition showCondition={showGameCard}>
-        <GameCard />
-        <FunctionBar />
-      </Transition>
-    </>
+    <div className='md:flex md:justify-center'>
+      <div className="md:max-w-screen-md md:w-full md:bg-gray-100 min-h-screen">
+        <NavBar />
+        <Transition showCondition={showCreateGame}>
+          <CreateGame />
+        </Transition>
+        <Transition showCondition={showGameSelect}>
+          <GameSelect />
+        </Transition>
+        <Transition showCondition={showGameCard}>
+          <GameCard />
+          <FunctionBar />
+        </Transition>
+      </div>
+    </div>
   )
 }
