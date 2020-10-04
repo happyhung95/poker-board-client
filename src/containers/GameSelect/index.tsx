@@ -6,7 +6,15 @@ import axios from 'axios'
 
 import { Alert, Transition } from '../../components'
 import { DownArrowSVG } from '../../svgs'
-import { loadAll, loadGame, displayGameList, displayGameCard } from '../../redux/actions'
+import {
+  loadAll,
+  loadGame,
+  displayGameList,
+  displayGameCard,
+  displayAddPlayer,
+  displayAddTransaction,
+  displaySettleDebts,
+} from '../../redux/actions'
 import { Game, GameName, AppState } from '../../types'
 
 type GameFetching = {
@@ -19,6 +27,9 @@ export const GameSelect = () => {
   const allGames = useSelector((state: AppState) => state.pokerBoard.allGames)
   const game = useSelector((state: AppState) => state.pokerBoard.game)
   const showGameList = useSelector((state: AppState) => state.pokerBoard.showGameList)
+  const showAddPlayer = useSelector((state: AppState) => state.pokerBoard.showAddPlayer)
+  const showAddTransaction = useSelector((state: AppState) => state.pokerBoard.showAddTransaction)
+  const showSettleDebts = useSelector((state: AppState) => state.pokerBoard.showSettleDebts)
   const [fetchingGame, setFetchingGame] = useState<GameFetching | undefined>()
   const [deleteGame, setDeleteGame] = useState<GameName | undefined>()
 
@@ -38,6 +49,9 @@ export const GameSelect = () => {
     batch(() => {
       dispatch(loadGame(res.data as Game))
       dispatch(displayGameList(false))
+      if (showAddPlayer) dispatch(displayAddPlayer(false))
+      if (showAddTransaction) dispatch(displayAddTransaction(false))
+      if (showSettleDebts) dispatch(displaySettleDebts(false))
     })
     setTimeout(() => dispatch(displayGameCard(true)), 150)
     setFetchingGame(undefined)

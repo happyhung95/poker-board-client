@@ -13,6 +13,9 @@ import {
   displayGameSelect,
   displayGameCard,
   displayGameList,
+  displayAddPlayer,
+  displayAddTransaction,
+  displaySettleDebts,
 } from '../../redux/actions'
 import { capitalizeString } from '../../helpers'
 import { Game, GameName, AppState } from '../../types'
@@ -26,6 +29,8 @@ export const CreateGame = () => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
   const showCreateGame = useSelector((state: AppState) => state.pokerBoard.showCreateGame)
+  const showAddTransaction = useSelector((state: AppState) => state.pokerBoard.showAddTransaction)
+  const showSettleDebts = useSelector((state: AppState) => state.pokerBoard.showSettleDebts)
 
   const suggestedName = `Poker ${new Date().getDate()}.${new Date().getMonth() + 1}`
 
@@ -43,6 +48,9 @@ export const CreateGame = () => {
         dispatch(loadAll(allGames?.data.reverse() as GameName[]))
         dispatch(displayGameSelect(true))
         dispatch(displayGameList(false))
+        dispatch(displayAddPlayer(true))
+        if (showAddTransaction) dispatch(displayAddTransaction(false))
+        if (showSettleDebts) dispatch(displaySettleDebts(false))
         if (res.data) dispatch(displayGameCard(true))
       })
     }, 150)
