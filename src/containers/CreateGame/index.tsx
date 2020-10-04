@@ -40,7 +40,7 @@ export const CreateGame = () => {
     setTimeout(() => {
       batch(() => {
         dispatch(loadGame(res.data as Game))
-        dispatch(loadAll(allGames?.data as GameName[]))
+        dispatch(loadAll(allGames?.data.reverse() as GameName[]))
         dispatch(displayGameSelect(true))
         dispatch(displayGameList(false))
         if (res.data) dispatch(displayGameCard(true))

@@ -17,13 +17,13 @@ export default function App() {
   useEffect(() => {
     async function fetchAllGames() {
       const res = await axios.get('https://poker-board.herokuapp.com/api/v1')
-      dispatch(loadAll(res?.data as GameName[]))
+      dispatch(loadAll(res?.data.reverse() as GameName[]))
     }
     fetchAllGames()
   }, [dispatch])
 
   return (
-    <div className='md:flex md:justify-center'>
+    <div className="md:flex md:justify-center">
       <div className="md:max-w-screen-md md:w-full md:bg-gray-100 min-h-screen">
         <NavBar />
         <Transition showCondition={showCreateGame}>

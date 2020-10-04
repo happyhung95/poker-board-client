@@ -49,7 +49,7 @@ export const GameSelect = () => {
     setDeleteGame(undefined)
     batch(() => {
       if (deleteGame?._id === game?._id) dispatch(loadGame(undefined))
-      dispatch(loadAll(res.data as GameName[]))
+      dispatch(loadAll(res.data.reverse() as GameName[]))
     })
   }
 
