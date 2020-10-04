@@ -11,6 +11,9 @@ const initState: AppState = {
     showGameList: false,
     showGameCard: false,
     showCreateGame: false,
+    showAddPlayer: false,
+    showAddTransaction: false,
+    showSettleDebts: false,
   },
 }
 

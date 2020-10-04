@@ -40,6 +40,9 @@ export const DISPLAY_GAME_SELECT = 'DISPLAY_GAME_SELECT'
 export const DISPLAY_GAME_LIST = 'DISPLAY_GAME_LIST'
 export const DISPLAY_CREATE_GAME = 'DISPLAY_CREATE_GAME'
 export const DISPLAY_GAME_CARD = 'DISPLAY_GAME_CARD'
+export const DISPLAY_ADD_PLAYER = 'DISPLAY_ADD_PLAYER'
+export const DISPLAY_ADD_TRANSACTION = 'DISPLAY_ADD_TRANSACTION'
+export const DISPLAY_SETTLE_DEBTS = 'DISPLAY_SETTLE_DEBTS'
 
 export type LoadAllGamesAction = {
   type: typeof LOAD_ALL_GAMES
@@ -83,6 +86,27 @@ export type DisplayCreateGameAction = {
   }
 }
 
+export type DisplayAddPlayerAction = {
+  type: typeof DISPLAY_ADD_PLAYER
+  payload: {
+    showAddPlayer: boolean
+  }
+}
+
+export type DisplayAddTransactionAction = {
+  type: typeof DISPLAY_ADD_TRANSACTION
+  payload: {
+    showAddTransaction: boolean
+  }
+}
+
+export type DisplaySettleDebtsAction = {
+  type: typeof DISPLAY_SETTLE_DEBTS
+  payload: {
+    showSettleDebts: boolean
+  }
+}
+
 export type Actions =
   | LoadAllGamesAction
   | LoadGameAction
@@ -90,6 +114,9 @@ export type Actions =
   | DisplayGameListAction
   | DisplayGameCardAction
   | DisplayCreateGameAction
+  | DisplayAddPlayerAction
+  | DisplayAddTransactionAction
+  | DisplaySettleDebtsAction
 
 export type PokerBoardState = {
   allGames: GameName[] | undefined
@@ -98,6 +125,9 @@ export type PokerBoardState = {
   showGameList: boolean
   showGameCard: boolean
   showCreateGame: boolean
+  showAddTransaction: boolean
+  showAddPlayer: boolean
+  showSettleDebts: boolean
 }
 
 export type AppState = {

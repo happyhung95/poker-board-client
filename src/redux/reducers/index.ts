@@ -10,6 +10,9 @@ import {
   DISPLAY_GAME_LIST,
   DISPLAY_GAME_CARD,
   DISPLAY_GAME_SELECT,
+  DISPLAY_ADD_PLAYER,
+  DISPLAY_ADD_TRANSACTION,
+  DISPLAY_SETTLE_DEBTS,
 } from '../../types'
 
 const initialState: PokerBoardState = {
@@ -19,6 +22,9 @@ const initialState: PokerBoardState = {
   showGameList: false,
   showGameCard: false,
   showCreateGame: false,
+  showAddPlayer: false,
+  showAddTransaction: false,
+  showSettleDebts: false,
 }
 
 function pokerBoard(state: PokerBoardState = initialState, action: Actions): PokerBoardState {
@@ -39,6 +45,15 @@ function pokerBoard(state: PokerBoardState = initialState, action: Actions): Pok
       return { ...state, ...action.payload }
     }
     case DISPLAY_GAME_SELECT: {
+      return { ...state, ...action.payload }
+    }
+    case DISPLAY_ADD_PLAYER: {
+      return { ...state, ...action.payload }
+    }
+    case DISPLAY_ADD_TRANSACTION: {
+      return { ...state, ...action.payload }
+    }
+    case DISPLAY_SETTLE_DEBTS: {
       return { ...state, ...action.payload }
     }
     default:

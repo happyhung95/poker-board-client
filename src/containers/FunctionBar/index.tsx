@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-scroll'
 
 import { AddPlayerForm, AddTransactionForm, SettleDebts, Transition } from '../../components'
+import { displayAddPlayer, displayAddTransaction, displaySettleDebts } from '../../redux/actions'
 import { CalculatorSVG, PeopleSVG, TransactionSVG } from '../../svgs'
 import { TransferSVG } from '../../svgs/Transfer'
 import { AppState } from '../../types'
 
 export const FunctionBar = () => {
+  const dispatch = useDispatch()
   const game = useSelector((state: AppState) => state.pokerBoard.game)
-  const [showPlayerForm, setShowPlayerForm] = useState(false)
-  const [showTransactionForm, setShowTransactionForm] = useState(false)
-  const [showSettleDebts, setShowSettleDebts] = useState(false)
+  const showAddPlayer = useSelector((state: AppState) => state.pokerBoard.showAddPlayer)
+  const showAddTransaction = useSelector((state: AppState) => state.pokerBoard.showAddTransaction)
+  const showSettleDebts = useSelector((state: AppState) => state.pokerBoard.showSettleDebts)
   const [showGameBalance, setShowGameBalance] = useState(false)
   const [gameBalance, setGameBalance] = useState(0)
 
@@ -35,19 +37,19 @@ export const FunctionBar = () => {
     {
       url: urls.addPlayer,
       svg: <PeopleSVG className={svgClassName} />,
-      handleClick: () => setShowPlayerForm(!showPlayerForm),
+      handleClick: () => dispatch(displayAddPlayer(!showAddPlayer)),
       skipRender: gameClosed,
     },
     {
       url: urls.addTransaction,
       svg: <TransactionSVG className={svgClassName} />,
-      handleClick: () => setShowTransactionForm(!showTransactionForm),
+      handleClick: () => dispatch(displayAddTransaction(!showAddTransaction)),
       skipRender: gameClosed,
     },
     {
       url: urls.settleDebts,
       svg: <TransferSVG className={svgClassName} />,
-      handleClick: () => setShowSettleDebts(!showSettleDebts),
+      handleClick: () => dispatch(displaySettleDebts(!showSettleDebts)),
       skipRender: !gameClosed,
     },
     {
@@ -98,12 +100,12 @@ export const FunctionBar = () => {
         </Transition>
       </div>
       <div id={urls.addTransaction}>
-        <Transition showCondition={showTransactionForm}>
+        <Transition showCondition={showAddTransaction}>
           <AddTransactionForm />
         </Transition>
       </div>
       <div id={urls.addPlayer}>
-        <Transition showCondition={showPlayerForm}>
+        <Transition showCondition={showAddPlayer}>
           <AddPlayerForm />
         </Transition>
       </div>

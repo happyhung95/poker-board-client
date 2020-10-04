@@ -36,8 +36,9 @@ export const settleDebts = (players: Player[]) => {
 
   if (totalGameBalance !== 0) {
     receivers.forEach((receiver) => (receiver.balance += averageResidual))
-    result.warningMsg += `Every winner receives ${totalGameBalance > 0 ? 'less' : 'more'} 
-    ${Math.abs(averageResidual).toFixed(2)} `
+    result.warningMsg += `Every winner receives ${Math.abs(averageResidual).toFixed(2)} ${
+      totalGameBalance > 0 ? 'less' : 'more'
+    }`
   }
 
   for (let giver of givers) {

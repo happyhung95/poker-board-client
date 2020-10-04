@@ -1,24 +1,32 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import Loader from 'react-loader-spinner'
 import axios from 'axios'
 
 import { PlayerCard } from '../../components'
-import { loadGame } from '../../redux/actions'
+import { displayAddPlayer, displayAddTransaction, displaySettleDebts, loadGame } from '../../redux/actions'
 import { Game, AppState } from '../../types'
 
 export const GameCard = () => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
   const game = useSelector((state: AppState) => state.pokerBoard.game)
+  const showAddPlayer = useSelector((state: AppState) => state.pokerBoard.showAddPlayer)
+  const showAddTransaction = useSelector((state: AppState) => state.pokerBoard.showAddTransaction)
+  const showSettleDebts = useSelector((state: AppState) => state.pokerBoard.showSettleDebts)
 
   const changeStatus = async (isClosed: boolean) => {
     setLoading(true)
     const res = await axios.put(`https://poker-board.herokuapp.com/api/v1/game/${game?._id}`, {
       gameClosed: isClosed,
     })
-    dispatch(loadGame(res.data as Game))
+    batch(() => {
+      dispatch(loadGame(res.data as Game))
+      if (isClosed && showAddPlayer) dispatch(displayAddPlayer(false))
+      if (isClosed && showAddTransaction) dispatch(displayAddTransaction(false))
+      if (!isClosed && showSettleDebts) dispatch(displaySettleDebts(false))
+    })
     setLoading(false)
   }
 
