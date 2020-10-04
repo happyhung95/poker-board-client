@@ -14,7 +14,7 @@ export const Popup = ({ title, message, confirmBtnLabel, confirmHandler }: Props
         <div className="fixed inset-0 transition-opacity">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
-        {/* <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203; */}
+        <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
         <div
           className="w-5/6 inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
           role="dialog"
