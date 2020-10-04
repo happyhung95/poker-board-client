@@ -68,7 +68,7 @@ export const GameSelect = () => {
   }
 
   return (
-    <div className="mt-2 px-4 w-full">
+    <div className="pt-1 px-4 w-full">
       {/* select game panel */}
       <div
         tabIndex={0}
