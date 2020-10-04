@@ -87,6 +87,9 @@ export const GameSelect = () => {
         <div className="flex-col mt-2 px-8 py-1 bg-gray-300 rounded-lg shadow-lg transition ease-in-out duration-100 ">
           {allGames ? (
             <>
+              {allGames.length === 0 && (
+                <div className="pl-1 text-gray-500 font-mono py-2">No games available. Please add a new game :)</div>
+              )}
               {allGames.map(({ _id, name }, index) => (
                 <div
                   key={index}
