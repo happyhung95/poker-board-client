@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector, batch } from 'react-redux'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import Loader from 'react-loader-spinner'
-import axios from 'axios'
 
+import api from '../../api'
 import { PlayerCard } from '../../components'
 import { displayAddPlayer, displayAddTransaction, displaySettleDebts, loadGame } from '../../redux/actions'
 import { Game, AppState } from '../../types'
@@ -18,11 +18,11 @@ export const GameCard = () => {
 
   const changeStatus = async (isClosed: boolean) => {
     setLoading(true)
-    const res = await axios.put(`https://poker-board.herokuapp.com/api/v1/game/${game?._id}`, {
+    const res = await api.put<Game>(`/game/${game?._id}`, {
       gameClosed: isClosed,
     })
     batch(() => {
-      dispatch(loadGame(res.data as Game))
+      dispatch(loadGame(res.data))
       if (isClosed && showAddPlayer) dispatch(displayAddPlayer(false))
       if (isClosed && showAddTransaction) dispatch(displayAddTransaction(false))
       if (!isClosed && showSettleDebts) dispatch(displaySettleDebts(false))

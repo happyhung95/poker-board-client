@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector, batch } from 'react-redux'
 import Loader from 'react-loader-spinner'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
-import axios from 'axios'
 
+import api from '../../api'
 import { Alert, Transition } from '../../components'
 import { DownArrowSVG } from '../../svgs'
 import {
@@ -45,9 +45,9 @@ export const GameSelect = () => {
 
   const handleGameSelect = async ({ _id }: GameName) => {
     setFetchingGame({ _id, status: true })
-    const res = await axios.get(`https://poker-board.herokuapp.com/api/v1/${_id}`)
+    const res = await api.get<Game>(`/${_id}`)
     batch(() => {
-      dispatch(loadGame(res.data as Game))
+      dispatch(loadGame(res.data))
       dispatch(displayGameList(false))
       if (showAddPlayer) dispatch(displayAddPlayer(false))
       if (showAddTransaction) dispatch(displayAddTransaction(false))
@@ -58,12 +58,12 @@ export const GameSelect = () => {
   }
 
   const sendDeleteRequest = async () => {
-    await axios.delete(`https://poker-board.herokuapp.com/api/v1/game/${deleteGame?._id}`)
-    const res = await axios.get('https://poker-board.herokuapp.com/api/v1')
+    await api.delete(`/game/${deleteGame?._id}`)
+    const res = await api.get<GameName[]>('/')
     setDeleteGame(undefined)
     batch(() => {
       if (deleteGame?._id === game?._id) dispatch(loadGame(undefined))
-      dispatch(loadAll(res.data.reverse() as GameName[]))
+      dispatch(loadAll(res.data.reverse()))
     })
   }
 

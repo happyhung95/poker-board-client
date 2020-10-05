@@ -5,6 +5,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import Loader from 'react-loader-spinner'
 import axios from 'axios'
 
+import api from '../../api'
 import { Transition } from '../../components'
 import {
   loadAll,
@@ -18,7 +19,7 @@ import {
   displaySettleDebts,
 } from '../../redux/actions'
 import { capitalizeString } from '../../helpers'
-import { Game, GameName, AppState } from '../../types'
+import { AppState } from '../../types'
 
 type FormValues = {
   name: string
@@ -34,26 +35,34 @@ export const CreateGame = () => {
 
   const suggestedName = `Poker ${new Date().getDate()}.${new Date().getMonth() + 1}`
 
-  const handleSubmit = async ({ name, buyIn }: FormValues) => {
+  const handleSubmit = ({ name, buyIn }: FormValues) => {
     setLoading(true)
-    const res = await axios.post(`https://poker-board.herokuapp.com/api/v1/game`, {
+
+    const requestOne = api.post(`/game`, {
       name: name ? capitalizeString(name) : suggestedName,
       buyIn: buyIn ? parseInt(buyIn) : 40,
     })
-    const allGames = await axios.get('https://poker-board.herokuapp.com/api/v1')
-    dispatch(displayCreateGame(false))
-    setTimeout(() => {
-      batch(() => {
-        dispatch(loadGame(res.data as Game))
-        dispatch(loadAll(allGames?.data.reverse() as GameName[]))
-        dispatch(displayGameSelect(true))
-        dispatch(displayGameList(false))
-        dispatch(displayAddPlayer(true))
-        if (showAddTransaction) dispatch(displayAddTransaction(false))
-        if (showSettleDebts) dispatch(displaySettleDebts(false))
-        if (res.data) dispatch(displayGameCard(true))
+    const requestTwo = api.get('/')
+
+    axios.all([requestOne, requestTwo]).then(
+      axios.spread((...responses) => {
+        dispatch(displayCreateGame(false))
+        setTimeout(() => {
+          batch(() => {
+            if (responses[0].data) {
+              dispatch(loadGame(responses[0]?.data))
+              dispatch(displayGameCard(true))
+            }
+            dispatch(loadAll(responses[1].data.reverse()))
+            dispatch(displayGameSelect(true))
+            dispatch(displayGameList(false))
+            dispatch(displayAddPlayer(true))
+            if (showAddTransaction) dispatch(displayAddTransaction(false))
+            if (showSettleDebts) dispatch(displaySettleDebts(false))
+          })
+        }, 150)
       })
-    }, 150)
+    )
   }
 
   return (

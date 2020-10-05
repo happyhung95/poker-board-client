@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Formik, FormikHelpers, Form, Field, FieldArray } from 'formik'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import Loader from 'react-loader-spinner'
-import axios from 'axios'
 
+import api from '../../api'
 import { loadGame } from '../../redux/actions'
 import { capitalizeString } from '../../helpers/index'
 import { Game, AppState } from '../../types'
@@ -48,8 +48,8 @@ export const AddPlayerForm = () => {
         })
       })
 
-    const res = await axios.post('https://poker-board.herokuapp.com/api/v1/players', { ...req })
-    dispatch(loadGame(res.data as Game))
+    const res = await api.post<Game>('/players', { ...req })
+    dispatch(loadGame(res.data))
     resetForm({})
     setLoading(false)
   }

@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Formik, FormikHelpers, Form, Field } from 'formik'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import Loader from 'react-loader-spinner'
-import axios from 'axios'
 
+import api from '../../api'
 import { loadGame } from '../../redux/actions'
 import { capitalizeString } from '../../helpers/index'
 import { Game, AppState } from '../../types'
@@ -13,7 +13,7 @@ import { Game, AppState } from '../../types'
 type FormValues = {
   lenderId: string
   borrowerId: string
-  amount: number
+  amount: string
 }
 
 type AddTransactionRequest = {
@@ -49,6 +49,7 @@ export const AddTransactionForm = () => {
       gameId: game!._id,
       requests: [],
     }
+    const amountInt = parseInt(amount as string)
 
     if (borrowerId === 'buyOut') {
       req.requests.push({
@@ -57,7 +58,7 @@ export const AddTransactionForm = () => {
         ownerId: lenderId,
         counterPartyId: null,
         description: 'Buy-out',
-        amount: amount,
+        amount: amountInt,
         refId: null,
       })
     } else {
@@ -71,7 +72,7 @@ export const AddTransactionForm = () => {
           ownerId: lenderId,
           counterPartyId: borrowerId!,
           description: `${capitalizeString(lenderName!)} lent to ${capitalizeString(borrowerName!)}`,
-          amount: amount,
+          amount: amountInt,
           refId,
         },
         {
@@ -80,14 +81,14 @@ export const AddTransactionForm = () => {
           ownerId: borrowerId,
           counterPartyId: lenderId!,
           description: `${capitalizeString(borrowerName!)} borrowed from ${capitalizeString(lenderName!)}`,
-          amount: -amount,
+          amount: -amountInt,
           refId,
         }
       )
     }
 
-    const res = await axios.post('https://poker-board.herokuapp.com/api/v1/transactions', { ...req })
-    dispatch(loadGame(res.data as Game))
+    const res = await api.post<Game>('/transactions', { ...req })
+    dispatch(loadGame(res.data))
     resetForm({})
     setLoading(false)
   }
@@ -95,7 +96,7 @@ export const AddTransactionForm = () => {
   return (
     <div className="my-6 mx-4 bg-gray-300 rounded shadow">
       <div className="pt-4 pl-8 font-bold text-xl text-gray-700 shadow">Add transactions</div>
-      <Formik initialValues={{ borrowerId: '', lenderId: '', amount: game!.buyIn }} onSubmit={handleSubmit}>
+      <Formik initialValues={{ borrowerId: '', lenderId: '', amount: game!.buyIn.toString() }} onSubmit={handleSubmit}>
         <Form className="px-4 border-2">
           <div className="flex my-3 px-3 items-end justify-between">
             <div className="w-1/3 pr-2">

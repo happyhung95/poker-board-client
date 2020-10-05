@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, batch } from 'react-redux'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 import axios from 'axios'
 
+import api from './api'
 import { Transition, Popup, PullContent, OnPullRequest } from './components'
 import { CreateGame, FunctionBar, GameCard, GameSelect, NavBar } from './containers'
 import { loadAll, loadGame } from './redux/actions'
-import { AppState, GameName, Game } from './types'
+import { AppState, GameName } from './types'
 import './tailwind.output.css'
 
 export default function App() {
@@ -18,19 +19,22 @@ export default function App() {
   const showGameSelect = useSelector((state: AppState) => state.pokerBoard.showGameSelect)
 
   const handleRefresh = async () => {
-    if (game) {
-      const res = await axios.get(`https://poker-board.herokuapp.com/api/v1/${game._id}`)
-      dispatch(loadGame(res?.data as Game))
-    } else {
-      const res = await axios.get(`https://poker-board.herokuapp.com/api/v1/`)
-      dispatch(loadAll(res?.data.reverse() as GameName[]))
-    }
+    const requests = [api.get(`/`)]
+    if (game) requests.push(api.get(`/${game._id}`))
+    axios.all(requests).then(
+      axios.spread((...responses) => {
+        batch(() => {
+          dispatch(loadAll(responses[0].data.reverse()))
+          if (responses.length > 1) dispatch(loadGame(responses[1]?.data))
+        })
+      })
+    )
   }
 
   useEffect(() => {
     async function fetchAllGames() {
-      const res = await axios.get('https://poker-board.herokuapp.com/api/v1')
-      dispatch(loadAll(res?.data.reverse() as GameName[]))
+      const res = await api.get<GameName[]>('/')
+      dispatch(loadAll(res?.data.reverse()))
     }
     fetchAllGames()
   }, [dispatch])
