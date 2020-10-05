@@ -44,27 +44,16 @@ export const settleDebts = (players: Player[]) => {
   for (let giver of givers) {
     for (let receiver of receivers) {
       if (receiver.balance !== 0) {
-        if (giver.balance >= receiver.balance) {
-          const amount = receiver.balance
-          giver.balance -= amount
-          receiver.balance -= amount
-          result.transfers.push(
-            `${capitalizeString(giver.name)} sends ${amount.toFixed(2)} to ${capitalizeString(receiver.name)}`
-          )
-          if (giver.balance === 0) break
-        } else {
-          const amount = giver.balance
-          giver.balance -= amount
-          receiver.balance -= amount
-          result.transfers.push(
-            `${capitalizeString(giver.name)} sends ${amount.toFixed(2)} to ${capitalizeString(receiver.name)}`
-          )
-          if (giver.balance === 0) break
-        }
+        const amount = giver.balance >= receiver.balance ? receiver.balance : giver.balance
+        giver.balance -= amount
+        receiver.balance -= amount
+        result.transfers.push(
+          `${capitalizeString(giver.name)} sends ${amount.toFixed(2)} to ${capitalizeString(receiver.name)}`
+        )
+        if (giver.balance === 0) break
       }
     }
   }
-
   return result
 }
 
