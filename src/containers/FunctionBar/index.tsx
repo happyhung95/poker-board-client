@@ -89,7 +89,7 @@ export const FunctionBar = () => {
             </div>
           ) : (
             <div className="my-4 mx-20 p-2 justify-self-center border-2 border-white bg-red-200 rounded-lg text-red-600 font-bold font-mono text-xl text-center">
-              {gameBalance > 0 ? `Surplussing ${gameBalance}` : `Missing ${gameBalance}`}
+              {gameBalance > 0 ? `Surplussing ${gameBalance}` : `Missing ${-gameBalance}`}
             </div>
           )}
         </Transition>
