@@ -4,7 +4,7 @@ import Loader from 'react-loader-spinner'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 import api from '../../api'
-import { Alert, Transition } from '../../components'
+import { Popup, Transition } from '../../components'
 import { DownArrowSVG } from '../../svgs'
 import {
   loadAll,
@@ -80,7 +80,7 @@ export const GameSelect = () => {
         <DownArrowSVG
           className={`h-5 w-5 transform transition duration-100 ease-in-out ${!showGameList && '-rotate-90'} `}
         />
-        <p className="font-bold text-xl">{game ? game.name : 'Select game'}</p>
+        <p className="font-sans font-bold text-xl">{game ? game.name : 'Select game'}</p>
       </div>
       {/* Game panel */}
       <Transition showCondition={showGameList}>
@@ -135,7 +135,8 @@ export const GameSelect = () => {
       </Transition>
       {/* Delete game alert */}
       <Transition showCondition={Boolean(deleteGame)}>
-        <Alert
+        <Popup
+          type="alert"
           title={`Delete: ${deleteGame?.name}`}
           message="Are you sure you want to delete this game? All of the data will be permanently removed."
           confirmBtnLabel="Delete"

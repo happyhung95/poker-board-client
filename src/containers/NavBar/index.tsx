@@ -29,7 +29,10 @@ export const NavBar = () => {
   }
 
   return (
-    <div className="fixed top-0 z-10 md:max-w-screen-md  w-full flex bg-gray-600 px-4 py-3 items-center justify-between">
+    <div
+      className="fixed top-0 z-10 md:max-w-screen-md  w-full flex px-4 py-3 items-center justify-between"
+      style={{ background: '#8392a3' }}
+    >
       <div className="text-white text-2xl font-extrabold font-mono">Poker Board</div>
       <div
         tabIndex={0}

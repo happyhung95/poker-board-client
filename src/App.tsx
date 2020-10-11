@@ -44,12 +44,11 @@ export default function App() {
       <NavBar />
       <Transition showCondition={showPopup}>
         <Popup
+          type="info"
           title="Disclaimer"
           message="Poker Board is a free tool available to the world. By continuing you agree to publicly share any data posted to Poker Board. It means everyone will know how bad you are at poker :)"
           confirmBtnLabel="I agree to share my data"
-          confirmHandler={() => {
-            displayPopup(false)
-          }}
+          confirmHandler={() => displayPopup(false)}
         />
       </Transition>
       <div className="mt-16 md:max-w-screen-md md:w-full md:bg-gray-100">

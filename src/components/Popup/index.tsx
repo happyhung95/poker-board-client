@@ -1,13 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Loader from 'react-loader-spinner'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 type Props = {
+  type: 'info' | 'alert'
   title: string
   message: string
   confirmBtnLabel: string
   confirmHandler: any
+  cancelBtnLabel?: string
+  cancelHandler?: any
 }
 
-export const Popup = ({ title, message, confirmBtnLabel, confirmHandler }: Props) => {
+export const Popup = ({
+  type,
+  title,
+  message,
+  confirmBtnLabel,
+  confirmHandler,
+  cancelBtnLabel = 'Cancel',
+  cancelHandler = () => {},
+}: Props) => {
+  const infoPopup = type === 'info'
+  const iconBgColor = infoPopup ? 'bg-orange-100' : 'bg-red-100'
+  const iconColor = infoPopup ? 'text-yellow-500' : 'text-red-600'
+
+  const [loading, setLoading] = useState(false)
+
+  const handleClick = () => {
+    setLoading(true)
+    confirmHandler()
+  }
+
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -23,8 +47,10 @@ export const Popup = ({ title, message, confirmBtnLabel, confirmHandler }: Props
         >
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
-              <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 sm:mx-0 sm:h-10 sm:w-10">
-                <svg className="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div
+                className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full ${iconBgColor} sm:mx-0 sm:h-10 sm:w-10`}
+              >
+                <svg className={`h-6 w-6 ${iconColor}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -44,15 +70,38 @@ export const Popup = ({ title, message, confirmBtnLabel, confirmHandler }: Props
             </div>
           </div>
           <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-              <button
-                type="button"
-                className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-yellow-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-orange-500 focus:outline-none focus:border-yellow-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                onClick={confirmHandler}
-              >
-                {confirmBtnLabel}
-              </button>
-            </span>
+            {infoPopup ? (
+              <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                <button
+                  type="button"
+                  className={`inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-yellow-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-orange-500 focus:outline-none focus:border-yellow-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5`}
+                  onClick={confirmHandler}
+                >
+                  {confirmBtnLabel}
+                </button>
+              </span>
+            ) : (
+              <>
+                <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                    onClick={handleClick}
+                  >
+                    {!loading ? confirmBtnLabel : <Loader type="Bars" color="#feb2b2" height={25} width={25} />}
+                  </button>
+                </span>
+                <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                    onClick={cancelHandler}
+                  >
+                    {cancelBtnLabel}
+                  </button>
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>

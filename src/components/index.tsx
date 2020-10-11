@@ -1,6 +1,5 @@
 export * from './AddPlayerForm'
 export * from './AddTransactionForm'
-export * from './Alert'
 export * from './OnPullRequest'
 export * from './PlayerCard'
 export * from './Popup'
