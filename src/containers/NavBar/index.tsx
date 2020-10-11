@@ -8,6 +8,7 @@ export const NavBar = () => {
   const dispatch = useDispatch()
   const game = useSelector((state: AppState) => state.pokerBoard.game)
   const showGameSelect = useSelector((state: AppState) => state.pokerBoard.showGameSelect)
+  const showCreateGame = useSelector((state: AppState) => state.pokerBoard.showCreateGame)
 
   const handleClick = () => {
     if (showGameSelect) {
@@ -39,9 +40,10 @@ export const NavBar = () => {
         role="button"
         onKeyPress={handleClick}
         onClick={handleClick}
-        className="px-2 py-1/2 rounded border-2 border-gray-500 bg-gray-500 text-gray-100 text-sm font-bold font-mono outline-none"
+        className="px-2 py-1/2 rounded border-2 border-gray-500 bg-gray-500 text-gray-100 text-center text-sm font-bold font-mono outline-none"
+        style={{ width: '5.5rem' }}
       >
-        New game
+        {!showCreateGame ? 'New game' : 'Return'}
       </div>
     </div>
   )

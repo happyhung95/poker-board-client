@@ -62,7 +62,7 @@ export const CreateGame = () => {
     <div className="mt-2 px-4">
       <Transition showCondition={showCreateGame}>
         <div className="my-6 mx-4 bg-gray-300 rounded shadow">
-          <div className="pt-2 pl-8 font-bold text-xl text-gray-700 shadow">New game</div>
+          <div className="pt-2 pl-8 font-bold text-xl text-gray-700">New game</div>
           <Formik initialValues={{ name: '', buyIn: '' }} onSubmit={handleSubmit}>
             {(props: FormikProps<FormValues>) => (
               <Form className="px-4 border-2">
