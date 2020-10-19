@@ -28,6 +28,11 @@ export const settleDebts = (players: Player[]) => {
     }
   })
 
+  if (totalGameBalance < 0 && receivers.length === 0) {
+    result.warningMsg += 'No transfers need to be made.'
+    return result
+  }
+
   givers.sort(customDescendingSort)
   receivers.sort(customDescendingSort)
 

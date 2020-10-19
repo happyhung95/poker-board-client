@@ -21,6 +21,7 @@ export const AddTransactionForm = () => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
   const [showWarning, displayWarning] = useState(false)
+  const [showError, displayError] = useState(false)
   const game = useSelector((state: AppState) => state.pokerBoard.game)
 
   const { players } = game!
@@ -30,17 +31,24 @@ export const AddTransactionForm = () => {
     { resetForm }: FormikHelpers<FormValues>
   ) => {
     if (!borrowerId || !lenderId) return
+
     if (borrowerId === lenderId) {
       displayWarning(true)
       return
     }
+
+    const amountInt = parseInt(amount as string)
+    if (!amountInt) {
+      displayError(true)
+      return
+    }
+
     setLoading(true)
 
     const req: TransactionRequest = {
       gameId: game!._id,
       requests: [],
     }
-    const amountInt = parseInt(amount as string)
 
     if (borrowerId === 'buyOut') {
       req.requests.push({
@@ -151,6 +159,15 @@ export const AddTransactionForm = () => {
           confirmHandler={() => {
             displayWarning(false)
           }}
+        />
+      </Transition>
+      <Transition showCondition={showError}>
+        <Popup
+          type="info"
+          title="Oops.."
+          message="The amount has to be a number"
+          confirmBtnLabel="Got it!"
+          confirmHandler={() => displayError(false)}
         />
       </Transition>
     </>
