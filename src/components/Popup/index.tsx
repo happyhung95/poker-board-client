@@ -3,7 +3,7 @@ import Loader from 'react-loader-spinner'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 type Props = {
-  type: 'info' | 'alert' | 'warning'
+  type: 'info' | 'alert'
   title: string
   message: string
   confirmBtnLabel: string

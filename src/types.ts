@@ -6,6 +6,7 @@ export type Transaction = {
   description: string
   amount: number
   createdAt: string
+  deleted: boolean
 }
 
 export type Player = {
@@ -32,6 +33,21 @@ export type Game = {
 
 export type SVGProps = {
   className: string
+}
+
+type AddTransactionRequest = {
+  type: 'add' | 'remove'
+  transactionId: string | null
+  refId: string | null
+  ownerId: string
+  counterPartyId: string | null
+  description: string
+  amount: number
+}
+
+export type TransactionRequest = {
+  gameId: string
+  requests: AddTransactionRequest[]
 }
 
 export const LOAD_GAME = 'LOAD_GAME'

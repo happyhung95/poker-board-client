@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import { Transition } from '../Transition'
+import { Transition } from '../index'
 import { DownArrowSVG } from '../../svgs'
 import { capitalizeString } from '../../helpers'
-import { Player } from '../../types'
+import { Player, AppState } from '../../types'
 
 type Props = {
   player: Player
-  players: Player[]
+  removeTransaction: (transactionId: string, playerId: string) => void
 }
 
-export const PlayerCard = ({ player, players }: Props) => {
-  const { name, balance, transactions } = player
-  const [showTransactions, toggleShowTransactions] = useState(false)
+export const PlayerCard = ({ player, removeTransaction }: Props) => {
+  const { name, balance, transactions, _id: playerId } = player
+  const [showTransactions, displayTransactions] = useState(false)
+  const game = useSelector((state: AppState) => state.pokerBoard.game)
 
-  const toggleDropdown = () => toggleShowTransactions(!showTransactions)
+  const toggleDropdown = () => displayTransactions((state) => !state)
 
   return (
     <div
@@ -48,9 +50,22 @@ export const PlayerCard = ({ player, players }: Props) => {
           onKeyPress={toggleDropdown}
           onClick={toggleDropdown}
         >
-          {transactions.map(({ description, amount }, index) => (
+          {transactions.map(({ _id, description, amount, refId, deleted }, index) => (
             <div key={index} className="flex justify-between px-6">
-              <div className="text-gray-600 text-sm"> - {description}</div>
+              <div className="flex">
+                <div className="text-gray-600 text-sm"> - {description}</div>
+                {refId && !deleted && !game?.gameClosed && (
+                  <button
+                    className="ml-2 font-semibold text-gray-500 text-sm"
+                    onClick={() => {
+                      toggleDropdown()
+                      removeTransaction(_id, playerId)
+                    }}
+                  >
+                    x
+                  </button>
+                )}
+              </div>
               <div className="text-gray-600 text-sm">{amount}</div>
             </div>
           ))}

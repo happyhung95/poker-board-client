@@ -9,27 +9,12 @@ import api from '../../api'
 import { Transition, Popup } from '../index'
 import { loadGame } from '../../redux/actions'
 import { capitalizeString } from '../../helpers/index'
-import { Game, AppState } from '../../types'
+import { Game, AppState, TransactionRequest } from '../../types'
 
 type FormValues = {
   lenderId: string
   borrowerId: string
   amount: string
-}
-
-type AddTransactionRequest = {
-  type: 'add' | 'remove'
-  transactionId: string | null
-  refId: string | null
-  ownerId: string
-  counterPartyId: string | null
-  description: string
-  amount: number
-}
-
-type Request = {
-  gameId: string
-  requests: AddTransactionRequest[]
 }
 
 export const AddTransactionForm = () => {
@@ -51,7 +36,7 @@ export const AddTransactionForm = () => {
     }
     setLoading(true)
 
-    const req: Request = {
+    const req: TransactionRequest = {
       gameId: game!._id,
       requests: [],
     }
