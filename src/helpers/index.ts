@@ -29,7 +29,7 @@ export const settleDebts = (players: Player[]) => {
   })
 
   if (totalGameBalance < 0 && receivers.length === 0) {
-    result.warningMsg += 'No transfers need to be made.'
+    result.warningMsg += 'No transfers can be made.'
     return result
   }
 
@@ -53,7 +53,7 @@ export const settleDebts = (players: Player[]) => {
         giver.balance -= amount
         receiver.balance -= amount
         result.transfers.push(
-          `${capitalizeString(giver.name)} sends ${amount.toFixed(2)} to ${capitalizeString(receiver.name)}`
+          `${capitalizeString(giver.name)} sends ${Math.abs(amount).toFixed(2)} to ${capitalizeString(receiver.name)}`
         )
         if (giver.balance === 0) break
       }
