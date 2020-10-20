@@ -45,17 +45,8 @@ export const GameCard = () => {
       requests: [],
     }
 
-    const pairedTransaction = game?.players
-      .find((player) => player._id === deleteTransaction?.counterPartyId)
-      ?.transactions.find((transaction) => transaction.refId === deleteTransaction?.refId)
-
-    if (!pairedTransaction) {
-      displayError(true)
-      return
-    }
-
-    req.requests.push(
-      {
+    if (deleteTransaction?.refId === 'buyOut') {
+      req.requests.push({
         type: 'remove',
         transactionId: deleteTransaction!._id,
         ownerId: deleteTransaction!.ownerId,
@@ -63,17 +54,38 @@ export const GameCard = () => {
         description: deleteTransaction!.description,
         amount: deleteTransaction!.amount,
         refId: deleteTransaction!.refId,
-      },
-      {
-        type: 'remove',
-        transactionId: pairedTransaction!._id,
-        ownerId: pairedTransaction!.ownerId,
-        counterPartyId: pairedTransaction!.counterPartyId,
-        description: pairedTransaction!.description,
-        amount: pairedTransaction!.amount,
-        refId: pairedTransaction!.refId,
+      })
+    } else {
+      const pairedTransaction = game?.players
+        .find((player) => player._id === deleteTransaction?.counterPartyId)
+        ?.transactions.find((transaction) => transaction.refId === deleteTransaction?.refId)
+
+      if (!pairedTransaction) {
+        displayError(true)
+        return
       }
-    )
+
+      req.requests.push(
+        {
+          type: 'remove',
+          transactionId: deleteTransaction!._id,
+          ownerId: deleteTransaction!.ownerId,
+          counterPartyId: deleteTransaction!.counterPartyId,
+          description: deleteTransaction!.description,
+          amount: deleteTransaction!.amount,
+          refId: deleteTransaction!.refId,
+        },
+        {
+          type: 'remove',
+          transactionId: pairedTransaction!._id,
+          ownerId: pairedTransaction!.ownerId,
+          counterPartyId: pairedTransaction!.counterPartyId,
+          description: pairedTransaction!.description,
+          amount: pairedTransaction!.amount,
+          refId: pairedTransaction!.refId,
+        }
+      )
+    }
 
     const res = await api.post<Game>('/transactions', { ...req })
     setDeleteTransaction(undefined)

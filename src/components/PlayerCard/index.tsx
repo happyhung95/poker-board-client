@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Transition } from '../index'
-import { DownArrowSVG } from '../../svgs'
+import { DownArrowSVG, DeleteSVG } from '../../svgs'
 import { capitalizeString } from '../../helpers'
 import { Player, AppState } from '../../types'
 
@@ -51,22 +51,26 @@ export const PlayerCard = ({ player, removeTransaction }: Props) => {
           onClick={toggleDropdown}
         >
           {transactions.map(({ _id, description, amount, refId, deleted }, index) => (
-            <div key={index} className="flex justify-between px-6">
+            <div key={index} className="flex justify-between pl-4 pr-6">
               <div className="flex">
-                <div className="text-gray-600 text-sm"> - {description}</div>
-                {refId && !deleted && !game?.gameClosed && (
+                {refId && !deleted && !game?.gameClosed ? (
                   <button
-                    className="ml-2 font-semibold text-gray-500 text-sm"
+                    className="p-1 items-center text-gray-700 text-xs"
                     onClick={() => {
                       toggleDropdown()
                       removeTransaction(_id, playerId)
                     }}
                   >
-                    x
+                    <DeleteSVG className="pr-1/2 w-2 h-3 text-gray-700 fill-current" style={{ paddingRight: 1 }} />
                   </button>
+                ) : (
+                  <div className={`${deleted ? 'text-gray-500' : 'text-gray-700'}`}>
+                    <DownArrowSVG className="w-4 h-5 transform -rotate-90" />
+                  </div>
                 )}
+                <div className={`text-sm ${deleted ? 'text-gray-500' : 'text-gray-700'}`}> {description}</div>
               </div>
-              <div className="text-gray-600 text-sm">{amount}</div>
+              <div className={`text-sm ${deleted ? 'text-gray-500' : 'text-gray-700'}`}>{amount}</div>
             </div>
           ))}
         </div>

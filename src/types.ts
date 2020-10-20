@@ -33,6 +33,7 @@ export type Game = {
 
 export type SVGProps = {
   className: string
+  style?: any
 }
 
 type AddTransactionRequest = {

@@ -58,7 +58,7 @@ export const AddTransactionForm = () => {
         counterPartyId: null,
         description: 'Buy-out',
         amount: amountInt,
-        refId: null,
+        refId: 'buyOut',
       })
     } else {
       const lenderName = players.find((player) => player._id === lenderId)?.name

@@ -1,4 +1,5 @@
 export * from './Calculator'
+export * from './Delete'
 export * from './DownArrow'
 export * from './People'
 export * from './Transaction'
