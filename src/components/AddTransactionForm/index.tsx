@@ -105,7 +105,7 @@ export const AddTransactionForm = () => {
               <div className="w-1/3 pr-2">
                 <div className="pb-1 px-1 font-mono font-medium text-xs text-gray-600">From</div>
                 <Field
-                  className="mx-1 p-1 w-full font-mono bg-gray-200 text-gray-800 text-sm"
+                  className="mx-1 p-1 w-full font-mono bg-gray-200 text-gray-800 text-base"
                   as="select"
                   name="lenderId"
                 >
@@ -118,7 +118,7 @@ export const AddTransactionForm = () => {
               <div className="w-1/3 pr-2">
                 <div className="pb-1 px-1 font-mono font-medium text-xs text-gray-600">To</div>
                 <Field
-                  className="mx-1 p-1 w-full font-mono bg-gray-200 text-gray-800 text-sm"
+                  className="mx-1 p-1 w-full font-mono bg-gray-200 text-gray-800 text-base"
                   as="select"
                   name="borrowerId"
                 >
@@ -130,10 +130,13 @@ export const AddTransactionForm = () => {
                 </Field>
               </div>
               <div className="w-1/3 pl-1">
-                <div className="pb-1 px-1 font-mono font-medium text-xs text-gray-600">Amount</div>
+                <div className="px-1 font-mono font-medium text-xs text-gray-600" style={{ paddingBottom: 3 }}>
+                  Amount
+                </div>
                 <Field
-                  className="py-1/2 px-2 w-full font-mono font-medium text-gray-800 border border-gray-200 border-opacity-25 rounded bg-gray-200 outline-none"
+                  className="px-2 w-full text-base font-mono font-medium text-gray-800 border border-gray-200 border-opacity-25 rounded bg-gray-200 outline-none"
                   placeholder={game!.buyIn}
+                  style={{ paddingBottom: 2, paddingTop: 2 }}
                   name="amount"
                 />
               </div>
