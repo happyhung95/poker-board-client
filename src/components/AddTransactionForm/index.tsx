@@ -37,7 +37,7 @@ export const AddTransactionForm = () => {
       return
     }
 
-    const amountInt = parseInt(amount as string)
+    const amountInt = amount ? parseInt(amount) : game!.buyIn
     if (!amountInt) {
       displayError(true)
       return
@@ -96,16 +96,13 @@ export const AddTransactionForm = () => {
     <>
       <div className="my-6 mx-4 bg-gray-300 rounded shadow">
         <div className="pt-4 pl-8 font-bold text-xl text-gray-700 shadow">Add transactions</div>
-        <Formik
-          initialValues={{ borrowerId: '', lenderId: '', amount: game!.buyIn.toString() }}
-          onSubmit={handleSubmit}
-        >
+        <Formik initialValues={{ borrowerId: '', lenderId: '', amount: '' }} onSubmit={handleSubmit}>
           <Form className="px-4 border-2">
             <div className="flex my-3 px-3 items-end justify-between">
               <div className="w-1/3 pr-2">
                 <div className="pb-1 px-1 font-mono font-medium text-xs text-gray-600">From</div>
                 <Field
-                  className="mx-1 p-1 w-full font-mono bg-gray-200 text-gray-800 text-base"
+                  className="mx-1 p-1 w-full font-mono bg-gray-200 text-gray-800 text-base outline-none"
                   as="select"
                   name="lenderId"
                 >
@@ -118,7 +115,7 @@ export const AddTransactionForm = () => {
               <div className="w-1/3 pr-2">
                 <div className="pb-1 px-1 font-mono font-medium text-xs text-gray-600">To</div>
                 <Field
-                  className="mx-1 p-1 w-full font-mono bg-gray-200 text-gray-800 text-base"
+                  className="mx-1 p-1 w-full font-mono bg-gray-200 text-gray-800 text-base outline-none"
                   as="select"
                   name="borrowerId"
                 >
