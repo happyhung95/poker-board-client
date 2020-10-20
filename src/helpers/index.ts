@@ -29,7 +29,6 @@ export const settleDebts = (players: Player[]) => {
   })
 
   if (totalGameBalance < 0 && receivers.length === 0) {
-    result.warningMsg += 'No transfers can be made.'
     return result
   }
 
