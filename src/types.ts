@@ -9,6 +9,11 @@ export type Transaction = {
   deleted: boolean
 }
 
+export enum DefaultTransaction {
+  buyIn = 'buyIn', // same as backend
+  buyOut = 'buyOut',
+}
+
 export type Player = {
   _id: string
   name: string

@@ -6,7 +6,7 @@ import Loader from 'react-loader-spinner'
 import api from '../../api'
 import { PlayerCard, Transition, Popup } from '../../components'
 import { displayAddPlayer, displayAddTransaction, displaySettleDebts, loadGame } from '../../redux/actions'
-import { Game, AppState, TransactionRequest, Transaction } from '../../types'
+import { Game, AppState, TransactionRequest, Transaction, DefaultTransaction as DT } from '../../types'
 
 export const GameCard = () => {
   const dispatch = useDispatch()
@@ -45,7 +45,7 @@ export const GameCard = () => {
       requests: [],
     }
 
-    if (deleteTransaction?.refId === 'buyOut') {
+    if (deleteTransaction?.refId === DT.buyOut || deleteTransaction?.refId === DT.buyIn) {
       req.requests.push({
         type: 'remove',
         transactionId: deleteTransaction!._id,

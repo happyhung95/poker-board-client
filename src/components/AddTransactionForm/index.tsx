@@ -9,7 +9,7 @@ import api from '../../api'
 import { Transition, Popup } from '../index'
 import { loadGame } from '../../redux/actions'
 import { capitalizeString } from '../../helpers/index'
-import { Game, AppState, TransactionRequest } from '../../types'
+import { Game, AppState, TransactionRequest, DefaultTransaction as DT } from '../../types'
 
 type FormValues = {
   lenderId: string
@@ -37,7 +37,7 @@ export const AddTransactionForm = () => {
       return
     }
 
-    const amountInt = amount ? parseInt(amount) : game!.buyIn
+    const amountInt = amount ? Math.abs(parseInt(amount)) : game!.buyIn
     if (!amountInt) {
       displayError(true)
       return
@@ -50,15 +50,15 @@ export const AddTransactionForm = () => {
       requests: [],
     }
 
-    if (borrowerId === 'buyOut') {
+    if (borrowerId === DT.buyIn || borrowerId === DT.buyOut) {
       req.requests.push({
         type: 'add',
         transactionId: null,
         ownerId: lenderId,
         counterPartyId: null,
-        description: 'Buy-out',
-        amount: amountInt,
-        refId: 'buyOut',
+        description: borrowerId === DT.buyIn ? 'Buy-in' : 'Buy-out',
+        amount: borrowerId === DT.buyIn ? -amountInt : amountInt,
+        refId: borrowerId,
       })
     } else {
       const lenderName = players.find((player) => player._id === lenderId)?.name
@@ -123,7 +123,8 @@ export const AddTransactionForm = () => {
                   {players.map((player) => (
                     <option value={player._id}>{capitalizeString(player.name)}</option>
                   ))}
-                  <option value="buyOut">Buy out</option>
+                  <option value={DT.buyIn}>Buy in </option>
+                  <option value={DT.buyOut}>Buy out</option>
                 </Field>
               </div>
               <div className="w-1/3 pl-1">
