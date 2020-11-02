@@ -23,13 +23,15 @@ export const SettleDebts = () => {
       setError('Please input only numbers')
       return
     }
+    const rateInt = rate ? Math.abs(parseInt(rate)) : 10
+    if (rateInt === 0) {
+      setError('Please input numbers higher than 0')
+      return
+    }
     if (error) {
       setError('')
     }
-
     setExchangedResult(undefined) // for effect
-    const rateInt = rate ? Math.abs(parseInt(rate)) : 10
-
     const exchangedPlayers: Player[] = JSON.parse(JSON.stringify(game!.players))
     exchangedPlayers.forEach((player) => (player.balance /= rateInt))
     setExchangedResult(settleDebts(exchangedPlayers, '€'))
