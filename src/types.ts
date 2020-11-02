@@ -56,6 +56,11 @@ export type TransactionRequest = {
   requests: AddTransactionRequest[]
 }
 
+export type SettleDebtResult = {
+  warningMsg: string
+  transfers: string[]
+}
+
 export const LOAD_GAME = 'LOAD_GAME'
 export const LOAD_ALL_GAMES = 'LOAD_ALL_GAMES'
 export const DISPLAY_GAME_SELECT = 'DISPLAY_GAME_SELECT'

@@ -1,4 +1,4 @@
-import { Player } from '../types'
+import { Player, SettleDebtResult } from '../types'
 
 export const capitalizeString = (string: string) => string.charAt(0).toUpperCase() + string.toLowerCase().slice(1)
 
@@ -8,16 +8,11 @@ type NameBalance = {
   skip?: boolean
 }
 
-type Result = {
-  warningMsg: string
-  transfers: string[]
-}
-
-export const settleDebts = (players: Player[]) => {
+export const settleDebts = (players: Player[], currency = '') => {
   let totalGameBalance = 0
   const givers: NameBalance[] = []
   const receivers: NameBalance[] = []
-  const result: Result = { warningMsg: '', transfers: [] }
+  const result: SettleDebtResult = { warningMsg: '', transfers: [] }
 
   players.forEach(({ name, balance }) => {
     totalGameBalance += balance
@@ -52,7 +47,9 @@ export const settleDebts = (players: Player[]) => {
         giver.balance -= amount
         receiver.balance -= amount
         result.transfers.push(
-          `${capitalizeString(giver.name)} sends ${Math.abs(amount).toFixed(2)} to ${capitalizeString(receiver.name)}`
+          `${capitalizeString(giver.name)} sends ${currency}${Math.abs(amount).toFixed(2)} to ${capitalizeString(
+            receiver.name
+          )}`
         )
         if (giver.balance === 0) break
       }

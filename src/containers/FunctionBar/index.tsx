@@ -96,7 +96,7 @@ export const FunctionBar = () => {
       </div>
       <div id={urls.settleDebts}>
         <Transition showCondition={showSettleDebts}>
-          <SettleDebts players={players} />
+          <SettleDebts />
         </Transition>
       </div>
       <div id={urls.addTransaction}>
