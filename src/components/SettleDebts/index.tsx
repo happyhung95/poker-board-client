@@ -44,7 +44,7 @@ export const SettleDebts = () => {
           <div key={index}>{transfer}</div>
         ))}
         <div>
-          <div className="my-4 py-2 px-6 w-auto inline-block rounded-lg border-2 border-gray-800">
+          <div className="my-4 py-2 px-6 w-auto inline-block rounded-lg border-2 border-gray-800 shadow-md">
             <div className="pt-2">EXCHANGE CHIPS:</div>
             <Formik initialValues={{ rate: '' }} onSubmit={handleSubmit}>
               <Form>
