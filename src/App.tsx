@@ -53,7 +53,7 @@ export default function App() {
       </Transition>
       <div className="mt-16 md:max-w-screen-md md:w-full md:bg-gray-100">
         <PullToRefresh onRefresh={handleRefresh} pullingContent={<PullContent />} refreshingContent={<OnPullRequest />}>
-          <div className="h-screen">
+          <div className="h-screen pb-10">
             <Transition showCondition={showCreateGame}>
               <CreateGame />
             </Transition>

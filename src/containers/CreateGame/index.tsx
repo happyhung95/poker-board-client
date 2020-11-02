@@ -5,7 +5,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import Loader from 'react-loader-spinner'
 
 import api from '../../api'
-import { Transition, Popup } from '../../components'
+import { Transition } from '../../components'
 import {
   loadAll,
   loadGame,
@@ -31,18 +31,20 @@ export const CreateGame = () => {
   const showCreateGame = useSelector((state: AppState) => state.pokerBoard.showCreateGame)
   const showAddTransaction = useSelector((state: AppState) => state.pokerBoard.showAddTransaction)
   const showSettleDebts = useSelector((state: AppState) => state.pokerBoard.showSettleDebts)
-  const [showError, displayError] = useState(false)
+  const [error, setError] = useState('')
 
   const suggestedName = `Poker ${new Date().getDate()}.${new Date().getMonth() + 1}`
 
   const handleSubmit = async ({ name, buyIn }: FormValues) => {
-    const buyInInt = buyIn ? parseInt(buyIn) : 40
-
-    if (!buyInInt) {
-      displayError(true)
+    if (isNaN(Number(buyIn))) {
+      setError('Please input only numbers')
       return
     }
+    if (error) {
+      setError('')
+    }
     setLoading(true)
+    const buyInInt = buyIn ? parseInt(buyIn) : 40
     const res = await api.post(`/game`, {
       name: name ? capitalizeString(name) : suggestedName,
       buyIn: buyInInt,
@@ -90,6 +92,9 @@ export const CreateGame = () => {
                       placeholder="40"
                     />
                   </div>
+                  <Transition showCondition={Boolean(error)}>
+                    <div className="pt-1 pl-24 text-xs font-thin text-red-600">{error}</div>
+                  </Transition>
                   <div className=" my-2 mx-4">
                     <button
                       className="w-20 p-2 flex justify-center border-2 border-white rounded-lg bg-gray-800 text-white font-mono font-semibold outline-none"
@@ -105,15 +110,6 @@ export const CreateGame = () => {
           </div>
         </Transition>
       </div>
-      <Transition showCondition={showError}>
-        <Popup
-          type="info"
-          title="Oops.."
-          message="The buy-in amount has to be a number"
-          confirmBtnLabel="Got it!"
-          confirmHandler={() => displayError(false)}
-        />
-      </Transition>
     </>
   )
 }

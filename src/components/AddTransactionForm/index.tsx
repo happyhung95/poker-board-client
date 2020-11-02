@@ -6,7 +6,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import Loader from 'react-loader-spinner'
 
 import api from '../../api'
-import { Transition, Popup } from '../index'
+import { Transition } from '../index'
 import { loadGame } from '../../redux/actions'
 import { capitalizeString } from '../../helpers/index'
 import { Game, AppState, TransactionRequest, DefaultTransaction as DT } from '../../types'
@@ -20,8 +20,7 @@ type FormValues = {
 export const AddTransactionForm = () => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
-  const [showWarning, displayWarning] = useState(false)
-  const [showError, displayError] = useState(false)
+  const [error, setError] = useState('')
   const game = useSelector((state: AppState) => state.pokerBoard.game)
 
   const { players } = game!
@@ -30,20 +29,28 @@ export const AddTransactionForm = () => {
     { borrowerId, lenderId, amount }: FormValues,
     { resetForm }: FormikHelpers<FormValues>
   ) => {
-    if (!borrowerId || !lenderId) return
-
-    if (borrowerId === lenderId) {
-      displayWarning(true)
+    if (!borrowerId || !lenderId) {
+      setError('Please select 2 people')
       return
     }
 
-    const amountInt = amount ? Math.abs(parseInt(amount)) : game!.buyIn
-    if (!amountInt) {
-      displayError(true)
+    if (borrowerId === lenderId) {
+      setError('Lender and borrower cannot be the same person')
       return
+    }
+
+    if (isNaN(Number(amount))) {
+      setError('Please input only numbers')
+      return
+    }
+
+    if (error) {
+      setError('')
     }
 
     setLoading(true)
+
+    const amountInt = amount ? Math.abs(parseInt(amount)) : game!.buyIn
 
     const req: TransactionRequest = {
       gameId: game!._id,
@@ -139,6 +146,9 @@ export const AddTransactionForm = () => {
                 />
               </div>
             </div>
+            <Transition showCondition={Boolean(error)}>
+              <div className="px-4 text-xs font-thin text-red-600">{error}</div>
+            </Transition>
             <div className="m-4">
               <button
                 className="w-20 p-2 border-2 flex justify-center border-white rounded-lg bg-gray-800 text-white font-mono font-semibold outline-none"
@@ -151,26 +161,6 @@ export const AddTransactionForm = () => {
           </Form>
         </Formik>
       </div>
-      <Transition showCondition={showWarning}>
-        <Popup
-          type="info"
-          title="Oops.."
-          message="The person cannot lend to him/herself"
-          confirmBtnLabel="Got it!"
-          confirmHandler={() => {
-            displayWarning(false)
-          }}
-        />
-      </Transition>
-      <Transition showCondition={showError}>
-        <Popup
-          type="info"
-          title="Oops.."
-          message="The amount has to be a number"
-          confirmBtnLabel="Got it!"
-          confirmHandler={() => displayError(false)}
-        />
-      </Transition>
     </>
   )
 }
