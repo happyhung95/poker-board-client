@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch, batch } from 'react-redux'
 import PullToRefresh from 'react-simple-pull-to-refresh'
+import Loader from 'react-loader-spinner'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import axios from 'axios'
 
 import api from './api'
@@ -17,6 +19,7 @@ export default function App() {
   const showGameCard = useSelector((state: AppState) => state.pokerBoard.showGameCard)
   const showCreateGame = useSelector((state: AppState) => state.pokerBoard.showCreateGame)
   const showGameSelect = useSelector((state: AppState) => state.pokerBoard.showGameSelect)
+  const showReload = useSelector((state: AppState) => state.pokerBoard.showReload)
 
   const handleRefresh = async () => {
     const requests = [api.get(`/`)]
@@ -42,31 +45,43 @@ export default function App() {
   return (
     <div className="md:flex md:justify-center">
       <NavBar />
-      <Transition showCondition={showPopup}>
-        <Popup
-          type="info"
-          title="Disclaimer"
-          message="Poker Board is a free tool available to the world. By continuing you agree to publicly share any data posted to Poker Board. It means everyone will know how bad you are at poker :)"
-          confirmBtnLabel="I agree to share my data"
-          confirmHandler={() => displayPopup(false)}
-        />
-      </Transition>
-      <div className="mt-16 md:max-w-screen-md md:w-full md:bg-gray-100">
-        <PullToRefresh onRefresh={handleRefresh} pullingContent={<PullContent />} refreshingContent={<OnPullRequest />}>
-          <div className="h-screen pb-10">
-            <Transition showCondition={showCreateGame}>
-              <CreateGame />
-            </Transition>
-            <Transition showCondition={showGameSelect}>
-              <GameSelect />
-            </Transition>
-            <Transition showCondition={showGameCard}>
-              <GameCard />
-              <FunctionBar />
-            </Transition>
+      {showReload ? (
+        <div className="h-screen flex items-center justify-center">
+          <Loader type="Bars" color="#cbd5e0" height={100} width={100} />
+        </div>
+      ) : (
+        <>
+          <Transition showCondition={showPopup}>
+            <Popup
+              type="info"
+              title="Disclaimer"
+              message="Poker Board is a free tool available to the world. By continuing you agree to publicly share any data posted to Poker Board. It means everyone will know how bad you are at poker :)"
+              confirmBtnLabel="I agree to share my data"
+              confirmHandler={() => displayPopup(false)}
+            />
+          </Transition>
+          <div className="mt-16 md:max-w-screen-md md:w-full md:bg-gray-100">
+            <PullToRefresh
+              onRefresh={handleRefresh}
+              pullingContent={<PullContent />}
+              refreshingContent={<OnPullRequest />}
+            >
+              <div className="h-screen pb-10">
+                <Transition showCondition={showCreateGame}>
+                  <CreateGame />
+                </Transition>
+                <Transition showCondition={showGameSelect}>
+                  <GameSelect />
+                </Transition>
+                <Transition showCondition={showGameCard}>
+                  <GameCard />
+                  <FunctionBar />
+                </Transition>
+              </div>
+            </PullToRefresh>
           </div>
-        </PullToRefresh>
-      </div>
+        </>
+      )}
     </div>
   )
 }

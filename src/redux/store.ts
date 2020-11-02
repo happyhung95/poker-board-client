@@ -14,6 +14,7 @@ const initState: AppState = {
     showAddPlayer: false,
     showAddTransaction: false,
     showSettleDebts: false,
+    showReload: false,
   },
 }
 

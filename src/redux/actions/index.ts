@@ -10,6 +10,7 @@ import {
   DISPLAY_ADD_PLAYER,
   DISPLAY_ADD_TRANSACTION,
   DISPLAY_SETTLE_DEBTS,
+  DISPLAY_RELOAD,
   Actions,
 } from '../../types'
 
@@ -73,5 +74,12 @@ export function displaySettleDebts(showSettleDebts: boolean): Actions {
   return {
     type: DISPLAY_SETTLE_DEBTS,
     payload: { showSettleDebts },
+  }
+}
+
+export function displayReload(showReload: boolean): Actions {
+  return {
+    type: DISPLAY_RELOAD,
+    payload: { showReload },
   }
 }

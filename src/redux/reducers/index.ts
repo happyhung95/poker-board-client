@@ -13,6 +13,7 @@ import {
   DISPLAY_ADD_PLAYER,
   DISPLAY_ADD_TRANSACTION,
   DISPLAY_SETTLE_DEBTS,
+  DISPLAY_RELOAD,
 } from '../../types'
 
 const initialState: PokerBoardState = {
@@ -25,6 +26,7 @@ const initialState: PokerBoardState = {
   showAddPlayer: false,
   showAddTransaction: false,
   showSettleDebts: false,
+  showReload: false,
 }
 
 function pokerBoard(state: PokerBoardState = initialState, action: Actions): PokerBoardState {
@@ -54,6 +56,9 @@ function pokerBoard(state: PokerBoardState = initialState, action: Actions): Pok
       return { ...state, ...action.payload }
     }
     case DISPLAY_SETTLE_DEBTS: {
+      return { ...state, ...action.payload }
+    }
+    case DISPLAY_RELOAD: {
       return { ...state, ...action.payload }
     }
     default:

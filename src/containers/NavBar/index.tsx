@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector, batch } from 'react-redux'
 
-import { displayGameSelect, displayCreateGame, displayGameCard } from '../../redux/actions'
+import { displayGameSelect, displayCreateGame, displayGameCard, displayReload } from '../../redux/actions'
 import { AppState } from '../../types'
 
 export const NavBar = () => {
@@ -34,7 +34,13 @@ export const NavBar = () => {
       className="fixed top-0 z-10 md:max-w-screen-md  w-full flex px-4 py-3 items-center justify-between"
       style={{ background: '#8392a3' }}
     >
-      <a href="https://poker.happyhung.com" className="text-white text-2xl font-extrabold font-mono">
+      <a
+        href="https://poker.happyhung.com"
+        className="text-white text-2xl font-extrabold font-mono"
+        onClick={() => {
+          dispatch(displayReload(true))
+        }}
+      >
         Poker Board
       </a>
       <div
