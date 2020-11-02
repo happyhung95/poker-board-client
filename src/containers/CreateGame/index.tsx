@@ -40,11 +40,15 @@ export const CreateGame = () => {
       setError('Please input only numbers')
       return
     }
+    const buyInInt = buyIn ? parseInt(buyIn) : 40
+    if (buyInInt === 0) {
+      setError('Please input number higher than 0')
+      return
+    }
     if (error) {
       setError('')
     }
     setLoading(true)
-    const buyInInt = buyIn ? parseInt(buyIn) : 40
     const res = await api.post(`/game`, {
       name: name ? capitalizeString(name) : suggestedName,
       buyIn: buyInInt,
