@@ -66,7 +66,7 @@ export default function App() {
               pullingContent={<PullContent />}
               refreshingContent={<OnPullRequest />}
             >
-              <div className="h-screen pb-10">
+              <div className="pb-10">
                 <Transition showCondition={showCreateGame}>
                   <CreateGame />
                 </Transition>
