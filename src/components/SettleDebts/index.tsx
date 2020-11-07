@@ -33,7 +33,7 @@ export const SettleDebts = () => {
     }
     setExchangedResult(undefined) // for effect
     const exchangedPlayers: Player[] = JSON.parse(JSON.stringify(game!.players))
-    exchangedPlayers.forEach((player) => (player.balance /= rateInt))
+    exchangedPlayers.forEach((player) => (player.balance *= rateInt / 100))
     setExchangedResult(settleDebts(exchangedPlayers, '€'))
   }
 

@@ -32,12 +32,11 @@ export const settleDebts = (players: Player[], currency = '') => {
 
   const residualSign = totalGameBalance > 0 ? -1 : 1 // less : more
   const averageResidual = (totalGameBalance / receivers.length) * residualSign
+  const averageResidualText = Math.abs(averageResidual).toFixed(2)
 
-  if (totalGameBalance !== 0) {
+  if (totalGameBalance !== 0 && averageResidualText !== '0.00') {
     receivers.forEach((receiver) => (receiver.balance += averageResidual))
-    result.warningMsg += `Every winner receives ${Math.abs(averageResidual).toFixed(2)} ${
-      totalGameBalance > 0 ? 'less' : 'more'
-    }`
+    result.warningMsg += `Every winner receives ${averageResidualText} ${totalGameBalance > 0 ? 'less' : 'more'}`
   }
 
   for (let giver of givers) {
