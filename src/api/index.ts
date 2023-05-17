@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export default axios.create({
-  baseURL: 'https://poker-board.herokuapp.com/api/v1/',
+  baseURL: 'https://poker-board-api.onrender.com/api/v1/',
 })
