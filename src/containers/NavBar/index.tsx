@@ -35,7 +35,7 @@ export const NavBar = () => {
       style={{ background: '#8392a3' }}
     >
       <a
-        href=""
+        href="https://poker.happyhung.com"
         className="text-white text-2xl font-extrabold font-mono"
         onClick={() => {
           dispatch(displayReload(true))
